@@ -15,13 +15,23 @@
 <body>
     <div class="container">
         <div class="menu">
-            <h2 class="menu-group-heading"> Pizzas </h2>
+            <div class="menu-group-heading">
+                <h2> Pizzas </h2>
+                <button class="sort-items-buttons">Sortuj: A - Z</button>
+                <button class="sort-items-buttons">Sortuj: Z - A</button>
+                <button id="sort-ascending-button" class="sort-items-buttons">Sortuj: Cena rosnąco</button>
+                <button id="sort-descending-button" class="sort-items-buttons">Sortuj: Cena malejąco</button>
+                <div class="search">
+                    <input class="searchbar" type="text" placeholder="Szukaj po składnikach">
+                </div>
+            </div>
             <div id="menu-group" class="menu-group"></div>
         </div>
         <div class="basket">
             <img src="https://upload.wikimedia.org/wikipedia/commons/a/af/Emojione_BW_1F6D2.svg" alt="basket" width="50"
                 height="50">
             <h2 class="total-price-order">Głodny? Zamów naszą pizzę</h2>
+            <button id="delete-all" class="delete-all-button">Usuń wszystko</button>
             <div class="basket-group"></div>
         </div>
     </div>

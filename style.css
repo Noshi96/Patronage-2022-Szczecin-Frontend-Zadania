@@ -75,6 +75,23 @@ body {
   background-color: #c43c13;
 }
 
+.delete-all-button {
+    padding: 1px 2px;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #f85321;
+    border-color: #f85321;
+    transition-duration: 0.2s;
+    cursor: pointer;
+  }
+  
+  .delete-all-button:hover {
+    background-color: #c43c13;
+  }
+
 .menu {
   font-family: "Inter", sans-serif;
   font-size: 14px;
@@ -151,6 +168,40 @@ body {
   background-color: #065192;
 }
 
+.sort-items-buttons {
+    display: inline;
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #428bca;
+    border-color: #357ebd;
+    transition-duration: 0.2s;
+    cursor: pointer;
+}
+
+.sort-items-buttons:hover {
+    background-color: #065192;
+  }
+
+.search {
+    margin-top: 10px;
+}
+
+.searchbar{
+    margin-right: 20px;
+    padding-right: 15px;
+    outline: none;
+    border-radius: 30px;
+    border: 1px solid #dcdcdc;
+    height: 35px;
+    min-width: 300px;
+    font-size: 16px;
+  }
+
 @media screen and (min-width: 1280px) {
   .menu {
     font-size: 16px;
@@ -165,3 +216,20 @@ body {
     height: 125px;
   }
 }
+
+/* @media screen and (max-width: 600px) {
+    .topnav .search-container {
+      float: none;
+    }
+    .topnav a, .topnav input[type=text], .topnav .search-container button {
+      float: none;
+      display: block;
+      text-align: left;
+      width: 100%;
+      margin: 0;
+      padding: 14px;
+    }
+    .topnav input[type=text] {
+      border: 1px solid #ccc;  
+    }
+  } */

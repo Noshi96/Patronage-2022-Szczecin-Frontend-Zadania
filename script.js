@@ -1,10 +1,44 @@
+
 /**
  * Global basket, list with pizzas inside.
  */
 let basket = [];
 
+let pizzaList = [];
+
+const information = "Głodny? Zamów naszą pizzę";
+
 document.addEventListener('DOMContentLoaded', function () {
+
+
+    // urls = ['https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json']
+    // Promise.all(urls.map(url =>
+    //     fetch(url).then(response => response.json())
+    // )).then(data => {
+    //     data.forEach(pizzaArray => {
+    //         pizzaArray.forEach(pizza =>{
+    //             console.log(pizza);
+    //             //pizzaList = pizza;
+    //             pizzaList.push({
+    //                 id: pizza.id,
+    //                 price: parseFloat(pizza.price).toFixed(2),
+    //                 title: pizza.title,
+    //                 ingredients: pizza.ingredients,
+    //                 image: pizza.image
+    //             });
+    //         })
+
+    //     })
+
+    // })
+
+    loadLocalStorage();
     getAllPizzas();
+    renderBasket();
+    setVisibilityForDeleteAllItemsButton();
+    addEventListenerForDeleteAllIteamsButton();
+    addSortListeners();
+    // console.log(pizzaList);
 });
 
 /**
@@ -16,10 +50,21 @@ function getAllPizzas() {
         .then(response => response.json())
         .then(data => {
             data.forEach(pizza => {
+
+                // pizzaList.push({
+                //     id: pizza.id,
+                //     price: parseFloat(pizza.price).toFixed(2),
+                //     title: pizza.title,
+                //     ingredients: pizza.ingredients,
+                //     image: pizza.image
+                // });
+
                 createPizzaItem(pizza);
             });
         });
 }
+
+
 
 /**
  * Take JSON object and add it to the menu as an item.
@@ -97,7 +142,7 @@ function addToBasket(id, price, title) {
 function removeFromBasket(id) {
 
     const pizzaIdInList = basket.findIndex((pizza => pizza.id === id));
-    
+
     if (basket[pizzaIdInList].count === 1) {
         basket = basket.filter(pizza => pizza.id !== id);
     } else {
@@ -138,6 +183,11 @@ function renderBasket() {
         document.querySelector('.basket-group').append(basketItem);
     });
     document.querySelector('.total-price-order').innerHTML = calculateUpdatedTotalPriceOrder(basket);
+
+    setVisibilityForDeleteAllItemsButton();
+
+    // Save basket into local storage
+    localStorage.setItem("basket", JSON.stringify(basket));
 }
 
 /** 
@@ -150,7 +200,74 @@ function calculateUpdatedTotalPriceOrder(basket) {
     let totalPriceOrder = basket.reduce((a, b) => a + b.price * b.count, 0);
 
     if (totalPriceOrder === 0.0) {
-        return "Głodny? Zamów naszą pizzę";
+        return information;
     }
     return (totalPriceOrder.toFixed(2) + " zł");
+}
+
+/**
+ * Setting visibility for delete button
+ */
+function setVisibilityForDeleteAllItemsButton() {
+
+    if (document.querySelector('.total-price-order').innerHTML === information) {
+        document.querySelector('#delete-all').style.display = 'none';
+    } else {
+        document.querySelector('#delete-all').style.display = 'block';
+    }
+}
+
+/**
+ * Clearing basket
+ */
+function addEventListenerForDeleteAllIteamsButton() {
+
+    document.querySelector('#delete-all').addEventListener('click', function () {
+        basket = [];
+        renderBasket();
+    });
+}
+
+/**
+ * Check if there is already a value in local storage and load basket
+ */
+function loadLocalStorage() {
+
+    if (!JSON.parse(localStorage.getItem("basket"))) {
+        localStorage.setItem("basket", JSON.stringify(basket));
+    } else {
+        basket = JSON.parse(localStorage.getItem("basket"))
+    }
+}
+
+function addSortListeners() {
+
+    document.querySelector('#sort-ascending-button').addEventListener('click', sortAscending);
+    document.querySelector('#sort-descending-button').addEventListener('click', sortDdescending);
+}
+
+function sortAscending() {
+
+    basket.sort(function (a, b) {
+        return a.price - b.price
+    });
+    renderBasket();
+}
+
+function sortDdescending() {
+
+    basket.sort(function (a, b) {
+        return b.price - a.price
+    });
+    renderBasket();
+}
+
+function addPizzaToList(pizza) {
+    pizzaList.push({
+        id: pizza.id,
+        price: pizza.price,
+        title: pizza.title,
+        ingredients: pizza.ingredients,
+        image: pizza.image
+    });
 }
