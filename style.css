@@ -170,25 +170,6 @@ body {
   background-color: #065192;
 }
 
-.sort-items-buttons {
-    display: flex;
-    padding: 6px 12px;
-    margin-bottom: 0;
-    font-size: 14px;
-    text-align: center;
-    border: 1px solid transparent;
-    border-radius: 4px;
-    color: #fff;
-    background-color: #428bca;
-    border-color: #357ebd;
-    transition-duration: 0.2s;
-    cursor: pointer;
-}
-
-.sort-items-buttons:hover {
-    background-color: #065192;
-  }
-
 .search {
     margin-top: 10px;
 }
@@ -204,7 +185,7 @@ body {
     font-size: 16px;
   }
 
-  @media only screen and (min-width: 600px) {
+  @media screen and (min-width: 1280px) {
   .menu {
     font-size: 16px;
   }
@@ -216,10 +197,6 @@ body {
   .menu-item-image {
     width: 125px;
     height: 125px;
-  }
-
-  .sort-items-buttons {
-      display: inline;
   }
 
   .menu {

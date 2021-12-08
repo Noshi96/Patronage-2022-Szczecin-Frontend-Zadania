@@ -1,8 +1,8 @@
+"use strict";
 
 /**
  * Global basket, list with pizzas inside.
  */
- "use strict";
 let basket = [];
 
 /**
@@ -23,8 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
     loadLocalStorage();
     renderBasket();
     setVisibilityForDeleteAllItemsButton();
-    addEventListenerForDeleteAllIteamsButton();
-    addSortListeners();
 
     document.querySelector('#search-bar').addEventListener('input', (event) => {
         filterOnPizzas(document.querySelector('#search-bar').value, event);
@@ -42,8 +40,7 @@ async function fetchPizzas() {
             method: 'GET',
             credentials: 'same-origin'
         });
-        const pizzas = await response.json();
-        return pizzas;
+        return await response.json();
     } catch (error) {
         console.error(error);
     }
@@ -59,13 +56,6 @@ async function renderPizzas() {
     globalTempPizzaList = pizzas;
     sortAscendingByTitle(false);
     showAllPizzas();
-}
-
-async function renderPizzasT() {
-
-    const pizzas = await fetchPizzas();
-    pizzaList = pizzas;
-    sortAscendingByTitle(false);
 }
 
 /**
@@ -86,7 +76,7 @@ function showAllPizzas() {
  * @param {*} pizza JSON object with particular pizza data.
  */
 function createPizzaItem(pizza) {
-    "use strict";
+
     const id = pizza.id;
     const title = pizza.title;
     const price = parseFloat(pizza.price).toFixed(2);
@@ -223,10 +213,20 @@ function calculateUpdatedTotalPriceOrder(basket) {
  */
 function setVisibilityForDeleteAllItemsButton() {
 
-    if (document.querySelector('.total-price-order').innerHTML === information) {
-        document.querySelector('#delete-all').style.display = 'none';
-    } else {
-        document.querySelector('#delete-all').style.display = 'block';
+    const totalPriceOrderSelect = document.querySelector('.total-price-order');
+
+    const deleteButton = document.createElement('button');
+    deleteButton.className = "delete-all-button";
+    deleteButton.id = "delete-all";
+    deleteButton.innerHTML = "Usuń wszystko";
+
+    const isExist = !!document.querySelector('#delete-all');
+
+    if (totalPriceOrderSelect.innerHTML === information && isExist) {
+        document.querySelector('#delete-all').remove();
+    } else if (!isExist) {
+        totalPriceOrderSelect.parentNode.insertBefore(deleteButton, totalPriceOrderSelect.nextSibling);
+        addEventListenerForDeleteAllIteamsButton();
     }
 }
 
@@ -253,12 +253,30 @@ function loadLocalStorage() {
     }
 }
 
-function addSortListeners() {
+/**
+ * Execute the sorting functions.
+ */
+function sortPizzas() {
 
-    document.querySelector('#sort-ascending-title-button').addEventListener('click', () => sortAscendingByTitle(true));
-    document.querySelector('#sort-descending-title-button').addEventListener('click', sortDescendingByTitle);
-    document.querySelector('#sort-ascending-price-button').addEventListener('click', sortAscendingByPrice);
-    document.querySelector('#sort-descending-price-button').addEventListener('click', sortDescendingByPrice);
+    const select = document.querySelector('#pizza-sort');
+    const option = select.options[select.selectedIndex];
+
+    switch (option.value) {
+        case "sort-ascending-title":
+            sortAscendingByTitle(true);
+            break;
+        case "sort-descending-title":
+            sortDescendingByTitle();
+            break;
+        case "sort-ascending-price":
+            sortAscendingByPrice();
+            break;
+        case "sort-descending-price":
+            sortDescendingByPrice();
+            break;
+        default:
+            console.log(`Sorry, we are out of ${option.value}.`);
+    }
 }
 
 /**
@@ -323,44 +341,20 @@ function sortDescendingByTitle() {
 /**
  * Filtering by ingredient.
  * @param {*} query string from search bar.
- * @param {*} event to detect backspace.
  */
-function filterOnPizzas(query, event) {
-    "use strict";
-    let temp = [];
+function filterOnPizzas(query) {
 
-    if (event.inputType === "deleteContentBackward") {
-        pizzaList = globalTempPizzaList;//renderPizzasT(); 
-    }
+    const queryItems = query.split(',').map(item => item.toLowerCase().trim());
+    pizzaList = globalTempPizzaList;
 
-    if (pizzaList.length === 0) {
-        pizzaList = globalTempPizzaList; //renderPizzasT();
+    if (queryItems.length) {
+        pizzaList = globalTempPizzaList;
     }
 
     if (query !== "") {
-        let next = [];
-        let result = [];
-        query.split(',').forEach(searchedIngredient => {
-            if (next.length > 1) {
-                temp = next;
-                next = [];
-            }
-            pizzaList.forEach(pizza => {
-                pizza.ingredients.forEach(ingredient => {
-                    if (ingredient.toLowerCase().includes(searchedIngredient.toLowerCase()) && !temp.includes(pizza)) {
-                        temp.push(pizza);
-                    } else if (ingredient.toLowerCase().includes(searchedIngredient.toLowerCase()) && temp.includes(pizza) && !next.includes(pizza)) {
-                        next.push(pizza);
-                    }
-                });
-            });
-            if (query.split(',').length > 1) {
-                result = next
-            } else {
-                result = temp;
-            }
+        queryItems.forEach(queryItem => {
+            pizzaList = pizzaList.filter(pizza => pizza.ingredients.some(ingredient => ingredient.includes(queryItem)));
         });
-        pizzaList = result;
         showAllPizzas();
     } else {
         renderPizzas();
