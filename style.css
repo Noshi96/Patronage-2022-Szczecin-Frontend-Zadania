@@ -6,7 +6,7 @@ body {
   max-width: 1600px;
   margin: 0 auto;
   padding: 1.5em;
-  display: flex;
+  display: inline;
 }
 
 .basket {
@@ -76,7 +76,8 @@ body {
 }
 
 .delete-all-button {
-    padding: 1px 2px;
+    padding: 6px 12px;
+    margin-bottom: 0;
     font-size: 14px;
     text-align: center;
     border: 1px solid transparent;
@@ -147,6 +148,7 @@ body {
 
 .menu-item-description { 
     text-transform: capitalize;
+    height: 54px;
 }
 
 .menu-item-button {
@@ -169,7 +171,7 @@ body {
 }
 
 .sort-items-buttons {
-    display: inline;
+    display: flex;
     padding: 6px 12px;
     margin-bottom: 0;
     font-size: 14px;
@@ -202,7 +204,7 @@ body {
     font-size: 16px;
   }
 
-@media screen and (min-width: 1280px) {
+  @media only screen and (min-width: 600px) {
   .menu {
     font-size: 16px;
   }
@@ -215,21 +217,33 @@ body {
     width: 125px;
     height: 125px;
   }
+
+  .sort-items-buttons {
+      display: inline;
+  }
+
+  .menu {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    order: 1;
+    flex: 1 1 auto;
+    align-self: auto;
+  }
+
+  .basket {
+  width: 220px;
+  margin: 0 auto;
+  padding: 1.5em;
+  order: 1;
+  flex: 0 1 auto;
+  align-self: auto;
 }
 
-/* @media screen and (max-width: 600px) {
-    .topnav .search-container {
-      float: none;
-    }
-    .topnav a, .topnav input[type=text], .topnav .search-container button {
-      float: none;
-      display: block;
-      text-align: left;
-      width: 100%;
-      margin: 0;
-      padding: 14px;
-    }
-    .topnav input[type=text] {
-      border: 1px solid #ccc;  
-    }
-  } */
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1.5em;
+  display: flex;
+  }
+  
+}

@@ -2,69 +2,82 @@
 /**
  * Global basket, list with pizzas inside.
  */
+ "use strict";
 let basket = [];
 
-let pizzaList = [];
+/**
+ * Global pizzas list currently displayed on the screen.
+ */
+let pizzaList;
+
+/**
+ * All feched pizzas.
+ */
+let globalTempPizzaList;
 
 const information = "Głodny? Zamów naszą pizzę";
 
 document.addEventListener('DOMContentLoaded', function () {
 
-
-    // urls = ['https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json']
-    // Promise.all(urls.map(url =>
-    //     fetch(url).then(response => response.json())
-    // )).then(data => {
-    //     data.forEach(pizzaArray => {
-    //         pizzaArray.forEach(pizza =>{
-    //             console.log(pizza);
-    //             //pizzaList = pizza;
-    //             pizzaList.push({
-    //                 id: pizza.id,
-    //                 price: parseFloat(pizza.price).toFixed(2),
-    //                 title: pizza.title,
-    //                 ingredients: pizza.ingredients,
-    //                 image: pizza.image
-    //             });
-    //         })
-
-    //     })
-
-    // })
-
+    renderPizzas();
     loadLocalStorage();
-    getAllPizzas();
     renderBasket();
     setVisibilityForDeleteAllItemsButton();
     addEventListenerForDeleteAllIteamsButton();
     addSortListeners();
-    // console.log(pizzaList);
+
+    document.querySelector('#search-bar').addEventListener('input', (event) => {
+        filterOnPizzas(document.querySelector('#search-bar').value, event);
+    });
+
 });
 
 /**
  * Fetch Pizzas data from given JSON.
  */
-function getAllPizzas() {
+async function fetchPizzas() {
 
-    fetch('https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json')
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(pizza => {
-
-                // pizzaList.push({
-                //     id: pizza.id,
-                //     price: parseFloat(pizza.price).toFixed(2),
-                //     title: pizza.title,
-                //     ingredients: pizza.ingredients,
-                //     image: pizza.image
-                // });
-
-                createPizzaItem(pizza);
-            });
+    try {
+        const response = await fetch(`https://raw.githubusercontent.com/alexsimkovich/patronage/main/api/data.json`, {
+            method: 'GET',
+            credentials: 'same-origin'
         });
+        const pizzas = await response.json();
+        return pizzas;
+    } catch (error) {
+        console.error(error);
+    }
 }
 
+/**
+ * Save all pizzas to list, sort and display them.
+ */
+async function renderPizzas() {
 
+    const pizzas = await fetchPizzas();
+    pizzaList = pizzas;
+    globalTempPizzaList = pizzas;
+    sortAscendingByTitle(false);
+    showAllPizzas();
+}
+
+async function renderPizzasT() {
+
+    const pizzas = await fetchPizzas();
+    pizzaList = pizzas;
+    sortAscendingByTitle(false);
+}
+
+/**
+ * Display all pizzas form list.
+ */
+function showAllPizzas() {
+
+    document.querySelector('#menu-group').innerHTML = "";
+    pizzaList.forEach(pizza => {
+        createPizzaItem(pizza);
+    });
+}
 
 /**
  * Take JSON object and add it to the menu as an item.
@@ -73,7 +86,7 @@ function getAllPizzas() {
  * @param {*} pizza JSON object with particular pizza data.
  */
 function createPizzaItem(pizza) {
-
+    "use strict";
     const id = pizza.id;
     const title = pizza.title;
     const price = parseFloat(pizza.price).toFixed(2);
@@ -86,19 +99,19 @@ function createPizzaItem(pizza) {
     const menuItem = document.createElement('div');
     menuItem.className = "menu-item";
     menuItem.innerHTML = `
-	 <img class="menu-item-image" src="${imageUrl}" alt="${title}">
-	 <div class="menu-item-text">
-		 <h3 class="menu-item-heading">
-		 <span class="menu-item-name">${title}</span>
-		 <span class="menu-item-price">${price} zł</span>
-		 </h3>
-		 <p class="menu-item-description">
-		 ${ingredientsString}
-		 </p>
-		 <button class="menu-item-button">Zamów</button>
-		 <div class="menu-item-separator"></div>
-	 </div>
-   `;
+      <img class="menu-item-image" src="${imageUrl}" alt="${title}">
+      <div class="menu-item-text">
+          <h3 class="menu-item-heading">
+          <span class="menu-item-name">${title}</span>
+          <span class="menu-item-price">${price} zł</span>
+          </h3>
+          <p class="menu-item-description">
+          ${ingredientsString}
+          </p>
+          <button class="menu-item-button">Zamów</button>
+          <div class="menu-item-separator"></div>
+      </div>
+    `;
 
     menuItem.querySelector('.menu-item-button').addEventListener('click', () => {
         addToBasket(id, price, title);
@@ -164,17 +177,17 @@ function renderBasket() {
         basketItem.className = "basket-item";
         basketItem.id = `pizza_id_${pizzaInBasket.id}`;
         basketItem.innerHTML = `
-			 <div class="basket-item-name">
-				 <h3 class="basket-item-heading">
-					 ${pizzaInBasket.title}
-				 </h3>
-			 </div>
-			 <div class="basket-item-count">${pizzaInBasket.count}</div>
-			 <div class="basket-item-button-div">
-				 <button class="basket-item-button">Usuń</button>
-			 </div>
-			 <div class="basket-item-price">${pizzaInBasket.price}zł</div>
-		 `;
+              <div class="basket-item-name">
+                  <h3 class="basket-item-heading">
+                      ${pizzaInBasket.title}
+                  </h3>
+              </div>
+              <div class="basket-item-count">${pizzaInBasket.count}</div>
+              <div class="basket-item-button-div">
+                  <button class="basket-item-button">Usuń</button>
+              </div>
+              <div class="basket-item-price">${pizzaInBasket.price}zł</div>
+          `;
 
         basketItem.querySelector('.basket-item-button').addEventListener('click', () => {
             removeFromBasket(pizzaInBasket.id);
@@ -242,32 +255,115 @@ function loadLocalStorage() {
 
 function addSortListeners() {
 
-    document.querySelector('#sort-ascending-button').addEventListener('click', sortAscending);
-    document.querySelector('#sort-descending-button').addEventListener('click', sortDdescending);
+    document.querySelector('#sort-ascending-title-button').addEventListener('click', () => sortAscendingByTitle(true));
+    document.querySelector('#sort-descending-title-button').addEventListener('click', sortDescendingByTitle);
+    document.querySelector('#sort-ascending-price-button').addEventListener('click', sortAscendingByPrice);
+    document.querySelector('#sort-descending-price-button').addEventListener('click', sortDescendingByPrice);
 }
 
-function sortAscending() {
+/**
+ * Sort pizzas in ascending order by price.
+ */
+function sortAscendingByPrice() {
 
-    basket.sort(function (a, b) {
+    pizzaList.sort(function (a, b) {
         return a.price - b.price
     });
-    renderBasket();
+    showAllPizzas();
 }
 
-function sortDdescending() {
+/**
+ * Sort pizzas in descending order by price.
+ */
+function sortDescendingByPrice() {
 
-    basket.sort(function (a, b) {
+    pizzaList.sort(function (a, b) {
         return b.price - a.price
     });
-    renderBasket();
+    showAllPizzas();
 }
 
-function addPizzaToList(pizza) {
-    pizzaList.push({
-        id: pizza.id,
-        price: pizza.price,
-        title: pizza.title,
-        ingredients: pizza.ingredients,
-        image: pizza.image
+/**
+ * Sort pizzas in ascending order by title.
+ */
+function sortAscendingByTitle(show) {
+
+    pizzaList.sort(function (a, b) {
+        if (a.title < b.title) {
+            return -1;
+        }
+        if (b.title < a.title) {
+            return 1;
+        }
+        return 0;
     });
+
+    if (show === true) {
+        showAllPizzas();
+    }
+}
+
+/**
+ * Sort pizzas in descending order by title.
+ */
+function sortDescendingByTitle() {
+
+    pizzaList.sort(function (a, b) {
+        if (a.title > b.title) {
+            return -1;
+        }
+        if (b.title > a.title) {
+            return 1;
+        }
+        return 0;
+    });
+    showAllPizzas();
+}
+
+/**
+ * Filtering by ingredient.
+ * @param {*} query string from search bar.
+ * @param {*} event to detect backspace.
+ */
+function filterOnPizzas(query, event) {
+    "use strict";
+    let temp = [];
+
+    if (event.inputType === "deleteContentBackward") {
+        pizzaList = globalTempPizzaList;//renderPizzasT(); 
+    }
+
+    if (pizzaList.length === 0) {
+        pizzaList = globalTempPizzaList; //renderPizzasT();
+    }
+
+    if (query !== "") {
+        let next = [];
+        let result = [];
+        query.split(',').forEach(searchedIngredient => {
+            if (next.length > 1) {
+                temp = next;
+                next = [];
+            }
+            pizzaList.forEach(pizza => {
+                pizza.ingredients.forEach(ingredient => {
+                    if (ingredient.toLowerCase().includes(searchedIngredient.toLowerCase()) && !temp.includes(pizza)) {
+                        temp.push(pizza);
+                    } else if (ingredient.toLowerCase().includes(searchedIngredient.toLowerCase()) && temp.includes(pizza) && !next.includes(pizza)) {
+                        next.push(pizza);
+                    }
+                });
+            });
+            if (query.split(',').length > 1) {
+                result = next
+            } else {
+                result = temp;
+            }
+        });
+        pizzaList = result;
+        showAllPizzas();
+    } else {
+        renderPizzas();
+        showAllPizzas();
+    }
 }

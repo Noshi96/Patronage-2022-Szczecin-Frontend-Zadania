@@ -44,3 +44,4 @@ rosnąco
 - Pliki *.js posiadają 'use strict’
 
 ## Działanie:
+![frontZad2](https://user-images.githubusercontent.com/38572172/145132679-fb701222-68b4-4bb4-940e-84f7f5ea8446.png)
