@@ -22,3 +22,26 @@ przeliczona na nowo
 
 ## Działanie:
 ![frontZad1](https://user-images.githubusercontent.com/38572172/142958582-7847930d-9d32-4813-b849-d13343ca11ef.png)
+
+
+## Frontend Zadanie 2
+
+## Opis:
+Zadanie polega na rozszerzeniu aplikacji webowej dla pizzerii, wymagania:
+- Aplikacja powinna byc responsywna zgodnie z zasadą „mobile first”
+- Koszyk powinien być zapisywany – po odświeżeniu strony dodane elementy sa dalej w 
+koszyku (należy skorzystać z „localStorage”)
+- Filtrowanie po składnikach – wpisanie składnika odświeża listę dostępnych pizz, 
+filtrowanie powinno być automatyczne, czyli użytkownik wpisuje i lista powinna się 
+odświeżyć bez dodatkowych przycisków/akcji. Użytkownik może podać wiele 
+składników odzielając je przecinkiem. Porównywanie powinno być proste, bazując 
+jedynie na tym czy składnik zawiera wpisany tekst.
+- Sortowanie po nazwie rosnąco (A-Z) (domyślne sortowanie – otwierając strone 
+produkty powinny być już posortowane), nazwie malejąco (Z-A), cenie malejąco i cenie 
+rosnąco
+- Sortowanie/Filtrowanie nie jest zapisywane po odświeżeniu strony
+- Przycisk „wyczyść koszyk” – kasuje wszystkie pizze z koszyka
+- Pliki *.js posiadają 'use strict’
+
+## Działanie:
+![frontZad2](https://user-images.githubusercontent.com/38572172/145132679-fb701222-68b4-4bb4-940e-84f7f5ea8446.png)
