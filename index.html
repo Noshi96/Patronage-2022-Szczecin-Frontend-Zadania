@@ -15,7 +15,19 @@
 <body>
     <div class="container">
         <div class="menu">
-            <h2 class="menu-group-heading"> Pizzas </h2>
+            <div class="menu-group-heading">
+                <h2> Pizzas </h2>
+                <label for="pizza-sort">Sortuj według:</label>
+                <select name="pizza-sort" id="pizza-sort" onChange="sortPizzas()">
+                    <option value="sort-ascending-title">Nazwa A - Z</option>
+                    <option value="sort-descending-title">Nazwa Z - A</option>
+                    <option value="sort-ascending-price">Najniższa cena</option>
+                    <option value="sort-descending-price">Najwyższa cena</option>
+                </select>
+                <div class="search">
+                    <input id="search-bar" class="searchbar" type="text" placeholder="Szukaj po składnikach">
+                </div>
+            </div>
             <div id="menu-group" class="menu-group"></div>
         </div>
         <div class="basket">

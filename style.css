@@ -6,7 +6,7 @@ body {
   max-width: 1600px;
   margin: 0 auto;
   padding: 1.5em;
-  display: flex;
+  display: inline;
 }
 
 .basket {
@@ -75,6 +75,24 @@ body {
   background-color: #c43c13;
 }
 
+.delete-all-button {
+    padding: 6px 12px;
+    margin-bottom: 0;
+    font-size: 14px;
+    text-align: center;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #fff;
+    background-color: #f85321;
+    border-color: #f85321;
+    transition-duration: 0.2s;
+    cursor: pointer;
+  }
+  
+  .delete-all-button:hover {
+    background-color: #c43c13;
+  }
+
 .menu {
   font-family: "Inter", sans-serif;
   font-size: 14px;
@@ -130,6 +148,7 @@ body {
 
 .menu-item-description { 
     text-transform: capitalize;
+    height: 54px;
 }
 
 .menu-item-button {
@@ -151,7 +170,22 @@ body {
   background-color: #065192;
 }
 
-@media screen and (min-width: 1280px) {
+.search {
+    margin-top: 10px;
+}
+
+.searchbar{
+    margin-right: 20px;
+    padding-right: 15px;
+    outline: none;
+    border-radius: 30px;
+    border: 1px solid #dcdcdc;
+    height: 35px;
+    min-width: 300px;
+    font-size: 16px;
+  }
+
+  @media screen and (min-width: 1280px) {
   .menu {
     font-size: 16px;
   }
@@ -164,4 +198,29 @@ body {
     width: 125px;
     height: 125px;
   }
+
+  .menu {
+    font-family: "Inter", sans-serif;
+    font-size: 14px;
+    order: 1;
+    flex: 1 1 auto;
+    align-self: auto;
+  }
+
+  .basket {
+  width: 220px;
+  margin: 0 auto;
+  padding: 1.5em;
+  order: 1;
+  flex: 0 1 auto;
+  align-self: auto;
+}
+
+.container {
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 1.5em;
+  display: flex;
+  }
+  
 }
